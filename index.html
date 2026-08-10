@@ -1137,7 +1137,7 @@
           <a href="#apps">Apps</a>
           <a href="#workshop">Workshop</a>
           <a href="#next">What's next</a>
-          <a href="mailto:hello@bunklyf.com">hello@bunklyf.com</a>
+          <a href="mailto:care@bunklyf.com">care@bunklyf.com</a>
         </nav>
       </div>
       <div class="foot-base">
@@ -1212,18 +1212,94 @@
       items.forEach(function (el) { io.observe(el); });
     })();
 
-    /* ---- signup form (not wired to a backend yet) ---- */
-    document.getElementById('dropForm').addEventListener('submit', function (e) {
-      e.preventDefault();
+    /* ---- signup form -> Google Sheet (via Apps Script) ---- */
+    /* PASTE YOUR WEB APP URL HERE. See apps-script/SETUP.md.
+       It looks like: https://script.google.com/macros/s/AKfycb..../exec   */
+    var SIGNUP_ENDPOINT = '';
+
+    (function () {
+      var form = document.getElementById('dropForm');
+      var input = document.getElementById('email');
+      var trap = document.getElementById('website');
+      var btn = document.getElementById('dropBtn');
       var note = document.getElementById('formNote');
-      var email = document.getElementById('email');
-      if (!email.value || email.value.indexOf('@') === -1) {
-        note.textContent = 'That email address is missing an @ — check it and try again.';
-        email.focus();
-        return;
+
+      function say(msg, kind) {
+        note.textContent = msg;
+        note.className = 'form-note' + (kind ? ' ' + kind : '');
       }
-      note.textContent = 'Not connected yet. Point this form at Buttondown, Mailchimp, or a Google Form to start collecting addresses.';
-    });
+
+      function looksLikeEmail(v) {
+        return /^[^@\s]+@[^@\s.]+\.[^@\s]{2,}$/.test(v);
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        var email = input.value.trim();
+
+        if (!looksLikeEmail(email)) {
+          say('That address doesn\u2019t look right — check it and try again.', 'bad');
+          input.focus();
+          return;
+        }
+
+        if (!SIGNUP_ENDPOINT) {
+          say('Not connected yet — add your Apps Script URL to SIGNUP_ENDPOINT in index.html.', 'bad');
+          return;
+        }
+
+        var payload = JSON.stringify({
+          email: email,
+          website: trap ? trap.value : '',   // honeypot
+          source: 'bunklyf.com'
+        });
+
+        btn.disabled = true;
+        say('Adding you\u2026');
+
+        /* text/plain keeps this a "simple" request, so the browser skips the
+           CORS preflight that Apps Script can't answer. */
+        fetch(SIGNUP_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: payload
+        })
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            if (data && data.ok) {
+              done(data.status === 'already_subscribed'
+                ? 'You\u2019re already on the list. Nice to see you again.'
+                : 'You\u2019re in. We\u2019ll be in touch when something ships.');
+            } else {
+              btn.disabled = false;
+              say('Something went wrong on our end. Try again in a minute?', 'bad');
+            }
+          })
+          .catch(function () {
+            /* Some browsers block reading the response even though the write
+               succeeded. Send it again opaquely and trust it landed. */
+            fetch(SIGNUP_ENDPOINT, {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: payload
+            }).then(function () {
+              done('You\u2019re in. We\u2019ll be in touch when something ships.');
+            }).catch(function () {
+              btn.disabled = false;
+              say('Couldn\u2019t reach us — check your connection and try again.', 'bad');
+            });
+          });
+
+        function done(msg) {
+          form.reset();
+          btn.disabled = false;
+          btn.textContent = 'Done';
+          say(msg, 'good');
+        }
+      });
+    })();
   </script>
 </body>
 

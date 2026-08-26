@@ -1175,11 +1175,68 @@
             <div class="ad ad-4">Hot singles near your router<small>Within 2 metres</small></div>
 
             <div class="sweep" aria-hidden="true"></div>
-            <div class="counter">14 blocked on this page</div>
+            <div class="counter" id="ad-counter">14 blocked on this page</div>
           </div>
         </div>
       </div>
     </section>
+
+    <script>
+      /* Detect whether AdBlo (or any ad blocker) has already hidden the demo ads.
+         Runs early so the CSS vaporize animation has not yet started. */
+      (function () {
+        const counter = document.getElementById('ad-counter');
+        if (!counter) return;
+
+        function adsAreBlocked() {
+          const ads = document.querySelectorAll('.ad');
+          if (ads.length === 0) return true; // already removed from DOM
+
+          for (const ad of ads) {
+            const style = window.getComputedStyle(ad);
+            // Common signals that an ad blocker has acted
+            if (
+              style.display === 'none' ||
+              style.visibility === 'hidden' ||
+              style.opacity === '0' ||
+              ad.offsetHeight === 0 ||
+              ad.offsetWidth === 0 ||
+              ad.offsetParent === null
+            ) {
+              return true;
+            }
+          }
+          return false;
+        }
+
+        // Check almost immediately, then again after a short delay
+        // (some blockers inject CSS slightly later)
+        function updateMessage() {
+          if (adsAreBlocked()) {
+            counter.textContent = 'Congratulation, your ads blocked by AdBlo';
+            counter.style.color = 'var(--mint)';
+            counter.style.borderColor = 'rgba(168, 255, 227, 0.5)';
+          } else {
+            counter.textContent = 'Install AdBlo to block these ads';
+            counter.style.color = '#ff8fab';
+            counter.style.borderColor = 'rgba(233, 0, 127, 0.45)';
+          }
+        }
+
+        // First check as soon as possible
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', () => {
+            updateMessage();
+            setTimeout(updateMessage, 250);
+            setTimeout(updateMessage, 800);
+          });
+        } else {
+          updateMessage();
+          setTimeout(updateMessage, 250);
+          setTimeout(updateMessage, 800);
+        }
+      })();
+    </script>
 
     <!-- ---------------- features ---------------- -->
     <section class="section" id="features">

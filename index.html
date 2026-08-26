@@ -21,15 +21,15 @@
   <meta property="og:site_name" content="bunklyf" />
   <meta property="og:title" content="bunklyf — we make small things that make big days easier" />
   <meta property="og:description"
-    content="Browser extensions and little apps, built by a few friends. zooRoll, EyeWise, Koo the Koala, and more in the oven." />
+    content="Browser extensions and little apps, built by a few friends. zooRoll, PDF Deckle, AdBlo, Koo the Koala, and more in the oven." />
   <meta property="og:image" content="https://bunklyf.com/assets/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="The bunklyf crew: zooRoll, EyeWise and Koo the Koala." />
+  <meta property="og:image:alt" content="The bunklyf crew: zooRoll, PDF Deckle and Koo the Koala." />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="bunklyf — we make small things that make big days easier" />
   <meta name="twitter:description"
-    content="Browser extensions and little apps, built by a few friends. zooRoll, EyeWise, Koo the Koala, and more in the oven." />
+    content="Browser extensions and little apps, built by a few friends. zooRoll, PDF Deckle, AdBlo, Koo the Koala, and more in the oven." />
   <meta name="twitter:image" content="https://bunklyf.com/assets/og-image.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,6 +50,9 @@
       --zoo: #8348D6;
       --tot: #d2bfec;
       /* zooRoll brand purple, from the product icon */
+      --blo: #E9007F;
+      /* AdBlo brand pink, from the product icon */
+      --blo-dark: #1A2233;
 
       --shadow: 0 0 0 3px var(--ink);
       --lift: 8px 8px 0 var(--ink);
@@ -304,6 +307,11 @@
       background: transparent;
     }
 
+    .btn-blo {
+      background: var(--blo);
+      color: #fff;
+    }
+
     /* ============ the crew (signature) ============ */
     .crew {
       border-block: 3px solid var(--ink);
@@ -397,6 +405,57 @@
     @keyframes roll {
       to {
         transform: rotate(360deg);
+      }
+    }
+
+    /* PDF Deckle's torn corner drifts, and lifts away when you hover him */
+    .deckle-corner {
+      transform-box: view-box;
+      transform-origin: 78% 20%;
+      animation: drift 5s ease-in-out infinite;
+      transition: transform .3s cubic-bezier(.34, 1.5, .64, 1);
+    }
+
+    .member:hover .deckle-corner {
+      animation: none;
+      transform: translate(8px, -8px) rotate(16deg);
+    }
+
+    @keyframes drift {
+
+      0%,
+      100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      50% {
+        transform: translate(3px, -3px) rotate(6deg);
+      }
+    }
+
+    /* AdBlo's stray pixels are the things it blocks; they wink out and come back */
+    .adblo-spark {
+      animation: blocked 3.6s steps(1, end) infinite;
+    }
+
+    .adblo-spark:nth-of-type(even) {
+      animation-delay: .6s;
+    }
+
+    .member:hover .adblo-spark {
+      animation-duration: 1s;
+    }
+
+    @keyframes blocked {
+
+      0%,
+      55% {
+        opacity: 1;
+      }
+
+      56%,
+      100% {
+        opacity: 0;
       }
     }
 
@@ -1072,6 +1131,33 @@
             <span class="tag">EyeWise - Koo the Koala</span>
           </button>
 
+          <!-- AdBlo -->
+          <button class="member" style="--d:1.4s;--tilt:3deg" data-go="#adblo" aria-label="Meet AdBlo">
+            <svg class="toon" viewBox="0 0 120 120" role="img" aria-hidden="true">
+              <rect x="6" y="6" width="108" height="108" rx="28" fill="#1A2233" stroke="#1B1033" stroke-width="5" />
+              <rect x="29" y="34" width="9" height="9" fill="#E9007F" />
+              <rect x="38" y="34" width="9" height="9" fill="#E9007F" />
+              <rect x="20" y="43" width="9" height="9" fill="#E9007F" />
+              <rect x="29" y="43" width="9" height="9" fill="#E9007F" />
+              <rect x="29" y="52" width="9" height="9" fill="#E9007F" />
+              <rect x="38" y="52" width="9" height="9" fill="#E9007F" />
+              <rect class="adblo-spark" x="47" y="43" width="9" height="9" fill="#E9007F" />
+              <rect x="74" y="34" width="9" height="9" fill="#E9007F" />
+              <rect x="83" y="34" width="9" height="9" fill="#E9007F" />
+              <rect x="65" y="43" width="9" height="9" fill="#E9007F" />
+              <rect x="74" y="43" width="9" height="9" fill="#E9007F" />
+              <rect x="74" y="52" width="9" height="9" fill="#E9007F" />
+              <rect x="83" y="52" width="9" height="9" fill="#E9007F" />
+              <rect class="adblo-spark" x="92" y="43" width="9" height="9" fill="#E9007F" />
+              <rect x="42" y="78" width="9" height="9" fill="#E9007F" />
+              <rect x="78" y="78" width="9" height="9" fill="#E9007F" />
+              <rect x="51" y="87" width="9" height="9" fill="#E9007F" />
+              <rect x="60" y="87" width="9" height="9" fill="#E9007F" />
+              <rect x="69" y="87" width="9" height="9" fill="#E9007F" />
+            </svg>
+            <span class="tag">AdBlo</span>
+          </button>
+
           <!-- ghosts -->
           <span class="member ghost" style="--d:1.5s">
             <svg class="toon" viewBox="0 0 120 120" role="img" aria-hidden="true">
@@ -1082,14 +1168,14 @@
             <span class="tag">in the oven</span>
           </span>
 
-          <span class="member ghost" style="--d:2s">
+          <!-- <span class="member ghost" style="--d:2s">
             <svg class="toon" viewBox="0 0 120 120" role="img" aria-hidden="true">
               <circle cx="60" cy="64" r="40" fill="none" stroke="#1B1033" stroke-width="5" stroke-dasharray="11 11" />
               <text x="60" y="80" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-size="46"
                 font-weight="800" fill="#1B1033">?</text>
             </svg>
             <span class="tag">still an idea</span>
-          </span>
+          </span> -->
         </div>
       </div>
     </section>
@@ -1252,6 +1338,46 @@
               </div>
             </div>
           </article>
+
+          <!-- ADBLO -->
+          <article class="app rise" id="adblo">
+            <div class="app-art">
+              <svg viewBox="0 0 120 120" role="img" aria-label="AdBlo">
+                <rect x="6" y="6" width="108" height="108" rx="28" fill="#1A2233" stroke="#1B1033" stroke-width="5" />
+                <rect x="29" y="50" width="9" height="9" fill="#E9007F" />
+                <rect x="38" y="50" width="9" height="9" fill="#E9007F" />
+                <rect x="20" y="59" width="9" height="9" fill="#E9007F" />
+                <rect x="29" y="59" width="9" height="9" fill="#E9007F" />
+                <rect x="47" y="59" width="9" height="9" fill="#E9007F" />
+                <rect x="29" y="68" width="9" height="9" fill="#E9007F" />
+                <rect x="38" y="68" width="9" height="9" fill="#E9007F" />
+                <rect x="74" y="50" width="9" height="9" fill="#E9007F" />
+                <rect x="83" y="50" width="9" height="9" fill="#E9007F" />
+                <rect x="65" y="59" width="9" height="9" fill="#E9007F" />
+                <rect x="74" y="59" width="9" height="9" fill="#E9007F" />
+                <rect x="92" y="59" width="9" height="9" fill="#E9007F" />
+                <rect x="74" y="68" width="9" height="9" fill="#E9007F" />
+                <rect x="83" y="68" width="9" height="9" fill="#E9007F" />
+              </svg>
+            </div>
+            <div>
+              <span class="kicker">Chrome extension</span>
+              <h3>AdBlo</h3>
+              <p>AdBlo blocks ads, trackers, malware hosts and coin miners. When a site misbehaves, it works out which
+                filter did it in about four rounds — instead of leaving you to switch things off one at a time.</p>
+              <ul class="specs">
+                <li class="live">Live on Chrome</li>
+                <li>Free</li>
+                <li>Finds the culprit filter</li>
+              </ul>
+              <div class="app-actions">
+                <!-- TODO: swap in the AdBlo Chrome Web Store listing -->
+                <a class="btn btn-blo" href="#">Add to Chrome</a>
+                <a class="btn btn-ghost" href="adblo.html">How it works</a>
+              </div>
+            </div>
+          </article>
+
 
         </div>
       </div>

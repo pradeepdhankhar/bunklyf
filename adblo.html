@@ -1,0 +1,1463 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>AdBlo — Ad Blocker for Chrome with Per-Site Pause &amp; Breakage Repair by BunkLyf</title>
+  <meta name="description"
+    content="AdBlo is a Manifest V3 ad blocker for Chrome. Blocks ads, trackers, malware and miners. Pause on any site with a timer, fix broken sites automatically, and block elements by pointing at them. No acceptable ads, no telemetry, no account.">
+  <link rel="canonical" href="https://adblo.app/">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#0a0d14">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AdBlo">
+  <meta property="og:title" content="AdBlo — The Chrome Ad Blocker That Fixes Sites It Breaks">
+  <meta property="og:description"
+    content="Blocks ads, trackers, malware and miners on Chrome. Per-site pause with timers, automatic breakage repair, element picker. No acceptable ads, no telemetry.">
+  <meta property="og:url" content="https://adblo.app/">
+  <meta property="og:image" content="https://adblo.app/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AdBlo — The Chrome Ad Blocker That Fixes Sites It Breaks">
+  <meta name="twitter:description"
+    content="Manifest V3 ad blocker for Chrome. Per-site pause with timers, breakage bisector, element picker. No acceptable ads, no telemetry.">
+  <meta name="twitter:image" content="https://adblo.app/og-cover.png">
+
+  <link rel="icon"
+    href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4IiB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCI+CiAgPGRlZnM+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9InZvaWRHbG93IiBjeD0iNTAlIiBjeT0iNTAlIiByPSI3MCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMTgyMDMxIiAvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwYTBkMTQiIC8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogIDwvZGVmcz4KCiAgPCEtLSBWb2lkIFNxdWlyY2xlIEJhc2UgLS0+CiAgPHJlY3QgeD0iNCIgeT0iNCIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMjAiIHJ4PSIzMCIgZmlsbD0idXJsKCN2b2lkR2xvdykiIHN0cm9rZT0iIzIzMmMzZCIgc3Ryb2tlLXdpZHRoPSIyLjUiIC8+CgogIDwhLS0gTGVmdCBQaXhlbGF0ZWQgRXllICgjRTkwMDdGKSAtLT4KICA8ZyBmaWxsPSIjRTkwMDdGIj4KICAgIDwhLS0gVG9wIHJvdyAtLT4KICAgIDxyZWN0IHg9IjMwIiB5PSI0NiIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiAvPgogICAgPHJlY3QgeD0iNDAiIHk9IjQ2IiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIC8+CiAgICA8IS0tIE1pZGRsZSByb3cgLS0+CiAgICA8cmVjdCB4PSIyMCIgeT0iNTYiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgLz4KICAgIDxyZWN0IHg9IjMwIiB5PSI1NiIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiAvPgogICAgPHJlY3QgeD0iNTAiIHk9IjU2IiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIC8+CiAgICA8IS0tIEJvdHRvbSByb3cgLS0+CiAgICA8cmVjdCB4PSIzMCIgeT0iNjYiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgLz4KICAgIDxyZWN0IHg9IjQwIiB5PSI2NiIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiAvPgogICAgPCEtLSBJbm5lciBQdXBpbCBDdXRvdXQgKFZvaWQpIC0tPgogICAgPHJlY3QgeD0iNDAiIHk9IjU2IiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiMwYTBkMTQiIC8+CiAgPC9nPgoKICA8IS0tIFJpZ2h0IFBpeGVsYXRlZCBFeWUgKCNFOTAwN0YpIC0tPgogIDxnIGZpbGw9IiNFOTAwN0YiPgogICAgPCEtLSBUb3Agcm93IC0tPgogICAgPHJlY3QgeD0iNzgiIHk9IjQ2IiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIC8+CiAgICA8cmVjdCB4PSI4OCIgeT0iNDYiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgLz4KICAgIDwhLS0gTWlkZGxlIHJvdyAtLT4KICAgIDxyZWN0IHg9IjY4IiB5PSI1NiIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiAvPgogICAgPHJlY3QgeD0iNzgiIHk9IjU2IiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIC8+CiAgICA8cmVjdCB4PSI5OCIgeT0iNTYiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgLz4KICAgIDwhLS0gQm90dG9tIHJvdyAtLT4KICAgIDxyZWN0IHg9Ijc4IiB5PSI2NiIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiAvPgogICAgPHJlY3QgeD0iODgiIHk9IjY2IiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIC8+CiAgICA8IS0tIElubmVyIFB1cGlsIEN1dG91dCAoVm9pZCkgLS0+CiAgICA8cmVjdCB4PSI4OCIgeT0iNTYiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzBhMGQxNCIgLz4KICA8L2c+Cgo8L3N2Zz4K"
+    type="image/svg+xml">
+  <link rel="apple-touch-icon"
+    href="data:image/png;base64,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">
+  <style>
+    /* AdBlo — marketing site.
+   Brand pulled from the extension icon: deep navy void, hot magenta pixel eyes,
+   mint for anything that means "saved" or "good". One typeface stack, no web
+   fonts — a page selling a performance tool should not ship 300 KB of fonts. */
+
+    :root {
+      --void: #0a0d14;
+      --panel: #111726;
+      --raise: #182031;
+      --line: #232c3d;
+      --text: #e6edf7;
+      --muted: #8b96a8;
+      --faint: #5c687a;
+      --pink: #e9007f;
+      --pink-soft: #ff4da6;
+      --mint: #a8ffe3;
+      --peri: #7c9cff;
+      --amber: #ffb454;
+      --rose: #ff6b81;
+
+      --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+      --wrap: 1120px;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--void);
+      color: var(--text);
+      font: 16px/1.65 var(--sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--peri);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--text);
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    .wrap {
+      width: min(var(--wrap), calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    .skip {
+      position: absolute;
+      left: -9999px;
+      background: var(--pink);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 8px;
+    }
+
+    .skip:focus {
+      left: 16px;
+      top: 16px;
+      z-index: 100;
+    }
+
+    /* ---------- nav ---------- */
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(10, 13, 20, 0.86);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-in {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      height: 62px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      font-size: 13px;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .brand img {
+      /* Eyes-only mark on transparent. The full icon has a dark navy plate that
+     disappears against this header, leaving the logo looking like a smudge. */
+      width: 34px;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 0 10px rgba(233, 0, 127, 0.45));
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      margin-left: auto;
+      font-size: 14.5px;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+    }
+
+    .nav-links a:hover,
+    .nav-links a[aria-current="page"] {
+      color: var(--text);
+    }
+
+    /* ---------- buttons ---------- */
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 13px 22px;
+      border-radius: 10px;
+      font: 650 15px var(--sans);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 120ms ease, background 160ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--pink);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--pink-soft);
+      color: #fff;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .btn-ghost:hover {
+      background: var(--raise);
+      color: var(--text);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--mint);
+      outline-offset: 3px;
+    }
+
+    /* ---------- typography ---------- */
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      margin: 0 0 14px;
+    }
+
+    h1 {
+      font-size: clamp(38px, 6.4vw, 70px);
+      font-weight: 800;
+    }
+
+    h2 {
+      font-size: clamp(27px, 3.6vw, 40px);
+      font-weight: 750;
+    }
+
+    h3 {
+      font-size: 19px;
+      font-weight: 680;
+      letter-spacing: -0.015em;
+    }
+
+    p {
+      margin: 0 0 16px;
+    }
+
+    .lede {
+      font-size: clamp(17px, 2vw, 20px);
+      color: var(--muted);
+      max-width: 62ch;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font: 700 11px var(--mono);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 14px;
+    }
+
+    .section {
+      padding: clamp(64px, 9vw, 116px) 0;
+    }
+
+    .section-head {
+      max-width: 68ch;
+      margin-bottom: 42px;
+    }
+
+    .pink {
+      color: var(--pink);
+    }
+
+    .mint {
+      color: var(--mint);
+    }
+
+    /* ---------- hero ---------- */
+
+    .hero {
+      position: relative;
+      padding: clamp(56px, 8vw, 96px) 0 clamp(48px, 7vw, 88px);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -30% 20% auto -10%;
+      height: 520px;
+      background: radial-gradient(closest-side, rgba(233, 0, 127, 0.16), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 26px 0 18px;
+    }
+
+    .hero-note {
+      font-size: 13.5px;
+      color: var(--faint);
+    }
+
+    /* ---------- the shredder: hero animation ---------- */
+
+    .browser {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      overflow: hidden;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+    }
+
+    .browser-bar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 14px;
+      background: var(--raise);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #2c3750;
+    }
+
+    .browser-url {
+      flex: 1;
+      margin-left: 8px;
+      font: 11.5px var(--mono);
+      color: var(--faint);
+      background: var(--void);
+      border-radius: 6px;
+      padding: 5px 10px;
+    }
+
+    .page {
+      position: relative;
+      height: 330px;
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .page-line {
+      height: 9px;
+      border-radius: 5px;
+      background: #1c2434;
+      margin-bottom: 11px;
+    }
+
+    .page-line.w70 {
+      width: 70%;
+    }
+
+    .page-line.w88 {
+      width: 88%;
+    }
+
+    .page-line.w54 {
+      width: 54%;
+    }
+
+    .page-line.title {
+      height: 15px;
+      width: 46%;
+      background: #26314a;
+      margin-bottom: 18px;
+    }
+
+    /* Absurd ads that slide in, wobble, then get vaporised. */
+    .ad {
+      position: absolute;
+      border-radius: 9px;
+      padding: 11px 13px;
+      font: 700 12.5px var(--sans);
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+      animation: adcycle 9s cubic-bezier(.2, .7, .3, 1) infinite;
+      will-change: transform, opacity, filter;
+    }
+
+    .ad small {
+      display: block;
+      font-weight: 500;
+      opacity: 0.85;
+      font-size: 10.5px;
+      margin-top: 2px;
+    }
+
+    .ad-1 {
+      top: 24px;
+      right: 18px;
+      width: 156px;
+      background: linear-gradient(135deg, #ff2d55, #ff8a00);
+      animation-delay: 0s;
+    }
+
+    .ad-2 {
+      bottom: 58px;
+      left: 22px;
+      width: 168px;
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      animation-delay: 1.4s;
+    }
+
+    .ad-3 {
+      top: 128px;
+      right: 40px;
+      width: 140px;
+      background: linear-gradient(135deg, #0891b2, #16a34a);
+      animation-delay: 2.8s;
+    }
+
+    .ad-4 {
+      bottom: 116px;
+      left: 44px;
+      width: 150px;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      animation-delay: 4.2s;
+    }
+
+    @keyframes adcycle {
+      0% {
+        opacity: 0;
+        transform: translateY(14px) scale(0.86) rotate(-3deg);
+        filter: none;
+      }
+
+      8% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotate(0deg);
+      }
+
+      14% {
+        transform: translateY(0) scale(1.04) rotate(2deg);
+      }
+
+      20% {
+        transform: translateY(0) scale(1) rotate(-2deg);
+      }
+
+      26% {
+        transform: translateY(0) scale(1.02) rotate(1deg);
+      }
+
+      32% {
+        opacity: 1;
+        transform: scale(1);
+        filter: none;
+      }
+
+      38% {
+        opacity: 0.9;
+        transform: scale(1.1);
+        filter: blur(0) saturate(2.4) brightness(1.5);
+      }
+
+      46% {
+        opacity: 0;
+        transform: scale(0.2) rotate(14deg);
+        filter: blur(7px) saturate(0);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(0.2);
+        filter: blur(7px);
+      }
+    }
+
+    /* The sweep that does the vaporising. */
+    .sweep {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(233, 0, 127, 0.32), rgba(168, 255, 227, 0.22), transparent);
+      transform: translateX(-100%);
+      animation: sweep 9s linear infinite;
+    }
+
+    @keyframes sweep {
+
+      0%,
+      34% {
+        transform: translateX(-100%);
+      }
+
+      46% {
+        transform: translateX(100%);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .counter {
+      position: absolute;
+      right: 18px;
+      bottom: 14px;
+      font: 700 12px var(--mono);
+      color: var(--mint);
+      background: rgba(10, 13, 20, 0.86);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 6px 11px;
+    }
+
+    /* ---------- cards ---------- */
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .g2 {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .g3 {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .card {
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(170deg, var(--panel), #0d1220);
+      transition: border-color 180ms ease, transform 180ms ease;
+    }
+
+    .card:hover {
+      border-color: #33405c;
+      transform: translateY(-3px);
+    }
+
+    .card p {
+      color: var(--muted);
+      margin-bottom: 0;
+      font-size: 15px;
+    }
+
+    .card .ico {
+      font-size: 22px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    /* ---------- the value section ---------- */
+
+    .worth-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .worth-card {
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(170deg, var(--panel), #0d1220);
+    }
+
+    .worth-label {
+      display: block;
+      font: 700 11px var(--mono);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 12px;
+    }
+
+    .worth-big {
+      display: block;
+      font: 700 52px var(--mono);
+      letter-spacing: -.04em;
+      line-height: 1;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .worth-sub {
+      display: block;
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .worth-line {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      font-size: 14.5px;
+      color: var(--muted);
+    }
+
+    .w-time {
+      font-family: var(--mono);
+      font-weight: 700;
+      color: var(--mint);
+    }
+
+    .w-money {
+      font-family: var(--mono);
+      font-weight: 700;
+      color: var(--pink2);
+    }
+
+    .calc-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .calc-row span {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .calc-row input {
+      width: 108px;
+      padding: 8px 10px;
+      font: 700 15px var(--mono);
+      text-align: right;
+      color: var(--text);
+      background: #070a11;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .calc-row input:focus {
+      outline: none;
+      border-color: var(--pink);
+    }
+
+    .calc-out {
+      margin: 14px 0 0;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .worth-note {
+      margin-top: 18px;
+      font-size: 13px;
+      color: var(--faint);
+      max-width: 78ch;
+    }
+
+    /* ---------- whack-a-popup ---------- */
+
+    .moles {
+      position: relative;
+      height: 190px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      overflow: hidden;
+    }
+
+    .mole {
+      position: absolute;
+      bottom: -60px;
+      padding: 9px 14px;
+      border-radius: 8px;
+      font: 700 12px var(--sans);
+      color: #fff;
+      background: #7c3aed;
+      animation: pop 4.5s ease-in-out infinite;
+    }
+
+    .mole:nth-child(1) {
+      left: 6%;
+      background: #ef4444;
+      animation-delay: 0s;
+    }
+
+    .mole:nth-child(2) {
+      left: 26%;
+      background: #7c3aed;
+      animation-delay: 0.5s;
+    }
+
+    .mole:nth-child(3) {
+      left: 46%;
+      background: #0891b2;
+      animation-delay: 1s;
+    }
+
+    .mole:nth-child(4) {
+      left: 66%;
+      background: #f59e0b;
+      animation-delay: 1.5s;
+    }
+
+    .mole:nth-child(5) {
+      left: 84%;
+      background: #16a34a;
+      animation-delay: 2s;
+    }
+
+    @keyframes pop {
+
+      0%,
+      100% {
+        transform: translateY(0);
+        opacity: 0;
+      }
+
+      14% {
+        transform: translateY(-108px);
+        opacity: 1;
+      }
+
+      30% {
+        transform: translateY(-108px);
+        opacity: 1;
+      }
+
+      38% {
+        transform: translateY(-108px) scale(0.4) rotate(20deg);
+        opacity: 0;
+      }
+    }
+
+    .moles-label {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      font: 700 11px var(--mono);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    /* ---------- comparison table ---------- */
+
+    .table-scroll {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+      font-size: 14.5px;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid #182031;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: var(--raise);
+      font: 700 11px var(--mono);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    tbody th {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    td {
+      color: var(--muted);
+    }
+
+    .col-us {
+      background: rgba(233, 0, 127, 0.07);
+    }
+
+    thead .col-us {
+      background: #2a1024;
+      color: var(--pink);
+    }
+
+    .yes {
+      color: var(--mint);
+      font-weight: 650;
+    }
+
+    .no {
+      color: var(--rose);
+    }
+
+    .part {
+      color: var(--amber);
+    }
+
+    /* ---------- ranking ---------- */
+
+    .rank {
+      display: grid;
+      gap: 22px;
+    }
+
+    .rank-item {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 28px;
+      position: relative;
+    }
+
+    .rank-item.first {
+      border-color: rgba(233, 0, 127, 0.45);
+      background: linear-gradient(170deg, #17101d, #0d1220);
+    }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--raise);
+      font: 800 15px var(--mono);
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .rank-item.first .rank-badge {
+      background: var(--pink);
+      color: #fff;
+    }
+
+    .rank-head {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .rank-tag {
+      font: 600 11.5px var(--mono);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    .pros-cons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .pros-cons ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14.5px;
+    }
+
+    .pros-cons li {
+      margin-bottom: 6px;
+    }
+
+    .pros-cons h4 {
+      margin: 0;
+      font: 700 11px var(--mono);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .pros h4 {
+      color: var(--mint);
+    }
+
+    .cons h4 {
+      color: var(--rose);
+    }
+
+    /* ---------- disclosure ---------- */
+
+    .disclosure {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      border: 1px solid rgba(255, 180, 84, 0.35);
+      background: rgba(255, 180, 84, 0.07);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 34px;
+      font-size: 14.5px;
+      color: var(--muted);
+    }
+
+    .disclosure strong {
+      color: var(--amber);
+    }
+
+    /* ---------- faq ---------- */
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--panel);
+      padding: 16px 20px;
+      margin-bottom: 10px;
+    }
+
+    details[open] {
+      border-color: #33405c;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 620;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: "+";
+      float: right;
+      color: var(--pink);
+      font-weight: 700;
+    }
+
+    details[open] summary::after {
+      content: "–";
+    }
+
+    details p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* ---------- cta + footer ---------- */
+
+    .cta {
+      text-align: center;
+      padding: clamp(52px, 7vw, 84px) 24px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: radial-gradient(120% 130% at 50% 0%, rgba(233, 0, 127, 0.16), transparent 62%), var(--panel);
+    }
+
+    .footer {
+      border-top: 1px solid var(--line);
+      padding: 40px 0;
+      color: var(--faint);
+      font-size: 14px;
+    }
+
+    .footer-in {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .footer a {
+      color: var(--muted);
+    }
+
+    .brandb {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: -.045em;
+      text-decoration: none;
+      display: flex;
+      align-items: baseline;
+      gap: 1px;
+      margin-right: auto;
+    }
+
+    .brandb .k {
+      display: inline-block;
+      transform: rotate(-13deg);
+      color: var(--pink);
+      transform-origin: 60% 70%;
+      transition: transform .25s cubic-bezier(.34, 1.6, .64, 1);
+    }
+
+    .brandb:hover .k {
+      transform: rotate(16deg) scale(1.15);
+    }
+
+    /* ---------- responsive ---------- */
+
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 38px;
+      }
+
+      .nav-links {
+        gap: 16px;
+        font-size: 14px;
+      }
+
+      .pros-cons {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .nav-links a.hide-sm {
+        display: none;
+      }
+    }
+
+    /* Motion is decoration here; if the user has asked for less, give them none. */
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      .ad {
+        opacity: 1;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "AdBlo",
+      "applicationCategory": "BrowserApplication",
+      "operatingSystem": "Chrome, Edge, Brave, Opera",
+      "description": "Manifest V3 content blocker for Chrome. Blocks ads, trackers, malware hosts and cryptocurrency miners, with per-site pause timers, an automatic breakage bisector and an element picker.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "featureList": [
+        "Blocks ads, trackers, malware and coin miners",
+        "Per-site pause with 5 minute, 30 minute, 1 hour, until-tab-closes and permanent options",
+        "Breakage bisector that finds which filter broke a site",
+        "Element picker and zapper, works inside iframes",
+        "Stealth mode: camera, microphone, location and WebRTC lockdown",
+        "Local-only statistics, no telemetry"
+      ],
+      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "isAccessibleForFree": true
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is AdBlo free?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. AdBlo is free and open source under GPL-3.0. There is no paid tier, no account and no subscription. Every feature works without signing in." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does AdBlo take money from advertisers?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. AdBlo has no acceptable ads programme. Some blockers run a whitelist that advertisers can pay to join. AdBlo has no such arrangement and no commercial relationship with any advertiser." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does AdBlo collect my browsing data?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. There is no network code in the extension outside the build-time filter list compiler, which runs on the developer's machine. Statistics are stored locally in your browser and never transmitted." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can AdBlo block YouTube ads?",
+          "acceptedAnswer": { "@type": "Answer", "text": "AdBlo removes ad instructions from YouTube's player data before the player reads them, and skips mid-roll breaks that slip through. YouTube changes these formats frequently, so like every blocker this can break temporarily until it is updated." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can any ad blocker stop streaming video ads?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Not when the platform uses server-side ad insertion. The ad is spliced into the video stream before it reaches your browser, arriving as the same segments from the same servers as the show. There is no separate request to block. No extension solves this, and AdBlo says so rather than pretending otherwise." }
+        },
+        {
+          "@type": "Question",
+          "name": "What happened to uBlock Origin on Chrome?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The full uBlock Origin extension is built on Manifest V2, which Chrome disabled for ordinary users during its phase-out. Its Manifest V3 successor, uBlock Origin Lite, is deliberately more limited. AdBlo was designed for Manifest V3 from the first line of code rather than being cut down to fit it." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="wrap nav-in">
+      <a class="brand" href="adblo.html"><img
+          src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjE2IDQyIDk2IDM4IiB3aWR0aD0iOTYiIGhlaWdodD0iMzgiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iQWRCbG8iPgogIDxnIGZpbGw9IiNFOTAwN0YiPgogICAgPHJlY3QgeD0iMzAiIHk9IjQ2IiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIC8+CiAgICA8cmVjdCB4PSI0MCIgeT0iNDYiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgLz4KICAgIDxyZWN0IHg9IjIwIiB5PSI1NiIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiAvPgogICAgPHJlY3QgeD0iMzAiIHk9IjU2IiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIC8+CiAgICA8cmVjdCB4PSI1MCIgeT0iNTYiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgLz4KICAgIDxyZWN0IHg9IjMwIiB5PSI2NiIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiAvPgogICAgPHJlY3QgeD0iNDAiIHk9IjY2IiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIC8+CiAgICA8cmVjdCB4PSI0MCIgeT0iNTYiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzBhMGQxNCIgLz4KICAgIDxyZWN0IHg9Ijc4IiB5PSI0NiIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiAvPgogICAgPHJlY3QgeD0iODgiIHk9IjQ2IiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIC8+CiAgICA8cmVjdCB4PSI2OCIgeT0iNTYiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgLz4KICAgIDxyZWN0IHg9Ijc4IiB5PSI1NiIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiAvPgogICAgPHJlY3QgeD0iOTgiIHk9IjU2IiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIC8+CiAgICA8cmVjdCB4PSI3OCIgeT0iNjYiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgLz4KICAgIDxyZWN0IHg9Ijg4IiB5PSI2NiIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiAvPgogICAgPHJlY3QgeD0iODgiIHk9IjU2IiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiMwYTBkMTQiIC8+CiAgPC9nPgo8L3N2Zz4K"
+          width="34" height="14" alt="" aria-hidden="true">AdBlo</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="ad-blockers-compare.html">Compare</a>
+        <a href="best-ad-blockers.html">Best ad blockers</a>
+        <a href="#faq" class="hide-sm">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ---------------- hero ---------------- -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="eyebrow">Manifest V3 · Chrome, Edge, Brave, Opera</span>
+          <h1>The ad blocker that <span class="pink">fixes the sites</span> it breaks.</h1>
+          <p class="lede">
+            AdBlo blocks ads, trackers, malware hosts and coin miners. When a site
+            misbehaves, it works out which filter did it in about four rounds —
+            instead of leaving you to switch things off one at a time.
+          </p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#install">Add to Chrome — free</a>
+            <a class="btn btn-ghost" href="compare.html">See how it compares</a>
+          </div>
+          <p class="hero-note">
+            No acceptable ads · No telemetry · No account · GPL-3.0 open source
+          </p>
+        </div>
+
+        <!-- The shredder. Absurd ads slide in, wobble, and get vaporised. -->
+        <div class="browser" role="img"
+          aria-label="Animation of a web page where intrusive adverts appear and are then removed by AdBlo, with a counter showing 14 items blocked.">
+          <div class="browser-bar">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="browser-url">https://a-perfectly-normal-website.com</span>
+          </div>
+          <div class="page">
+            <div class="page-line title"></div>
+            <div class="page-line w88"></div>
+            <div class="page-line w70"></div>
+            <div class="page-line w88"></div>
+            <div class="page-line w54"></div>
+            <div class="page-line w70"></div>
+            <div class="page-line w88"></div>
+
+            <div class="ad ad-1">YOU ARE VISITOR #1,000,000<small>Claim your prize now!!</small></div>
+            <div class="ad ad-2">Your PC is 300% infected<small>Doctors hate this</small></div>
+            <div class="ad ad-3">47 free toolbars<small>One click install</small></div>
+            <div class="ad ad-4">Hot singles near your router<small>Within 2 metres</small></div>
+
+            <div class="sweep" aria-hidden="true"></div>
+            <div class="counter">14 blocked on this page</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------- features ---------------- -->
+    <section class="section" id="features">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">What it does</span>
+          <h2>Blocking is the easy part. Living with it isn't.</h2>
+          <p class="lede">
+            Every blocker blocks. The difference shows up on the day a checkout
+            page won't load and you have to work out why.
+          </p>
+        </div>
+
+        <div class="grid g3">
+          <article class="card">
+            <span class="ico" aria-hidden="true">🔎</span>
+            <h3>Fix a broken site</h3>
+            <p>
+              AdBlo turns filter layers off in halves and reloads the page, so nine
+              possible culprits become four questions instead of nine. Then it
+              offers a one-click remedy. No other blocker does this.
+            </p>
+          </article>
+          <article class="card">
+            <span class="ico" aria-hidden="true">⏸️</span>
+            <h3>Pause with a timer</h3>
+            <p>
+              Five minutes, thirty, an hour, until the tab closes, or until you turn
+              it back on. A countdown tells you exactly when blocking resumes — no
+              more forgetting you disabled it three weeks ago.
+            </p>
+          </article>
+          <article class="card">
+            <span class="ico" aria-hidden="true">🎯</span>
+            <h3>Point and remove</h3>
+            <p>
+              The element picker highlights whatever you hover, shows the selector,
+              and lets you widen or narrow the selection with the arrow keys. Works
+              inside iframes.
+            </p>
+          </article>
+          <article class="card">
+            <span class="ico" aria-hidden="true">🕶️</span>
+            <h3>Stealth mode</h3>
+            <p>
+              One switch blocks camera, microphone and location for every site, and
+              stops WebRTC from handing out your local network addresses. Turning it
+              off restores your old settings rather than overwriting them.
+            </p>
+          </article>
+          <article class="card">
+            <span class="ico" aria-hidden="true">🚫</span>
+            <h3>No acceptable ads</h3>
+            <p>
+              Some blockers operate a whitelist that advertisers can pay to join.
+              AdBlo has no such programme and no commercial relationship with any
+              advertiser. Nothing is let through for money.
+            </p>
+          </article>
+          <article class="card">
+            <span class="ico" aria-hidden="true">📵</span>
+            <h3>Nothing phones home</h3>
+            <p>
+              There is no network code in the extension at all. Your block counts
+              live in your browser and stay there. No account, no sync server, no
+              analytics identifier.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------- the value section ---------------- -->
+    <section class="section" id="worth" style="padding-top:0">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">What blocking is actually worth</span>
+          <h2>You didn't block 4,600 ads.<br>You got <span class="pink">nineteen hours</span> of your life back.</h2>
+          <p class="lede">
+            A block count is a statistic. Time is the thing you actually lost. AdBlo
+            shows both — on every page, and for all time.
+          </p>
+        </div>
+
+        <div class="worth-grid">
+          <div class="worth-card">
+            <span class="worth-label">On this page</span>
+            <b class="worth-big" id="w-blocked">12</b>
+            <span class="worth-sub">blocked</span>
+            <div class="worth-line">
+              <span class="w-time" id="w-time">3 min</span> saved ·
+              <span class="w-money" id="w-money">$1</span> of your time back
+            </div>
+          </div>
+
+          <div class="worth-card">
+            <span class="worth-label">All time</span>
+            <b class="worth-big" id="w-total">4.6K</b>
+            <span class="worth-sub">blocked · 2.8 MB not downloaded</span>
+            <div class="worth-line">
+              <span class="w-time" id="w-ttime">19 h 13 m</span> saved ·
+              <span class="w-money" id="w-tmoney">$384</span> earned back
+            </div>
+          </div>
+
+          <div class="worth-card calc">
+            <span class="worth-label">Your number</span>
+            <label class="calc-row">
+              <span>Ads blocked a day</span>
+              <input type="number" id="c-ads" value="120" min="0" max="10000">
+            </label>
+            <label class="calc-row">
+              <span>Your hourly rate</span>
+              <input type="number" id="c-rate" value="20" min="0" max="100000">
+            </label>
+            <p class="calc-out">
+              In a year that's <b class="w-time" id="c-time">182 h</b>
+              and <b class="w-money" id="c-money">$3.6K</b> of your time.
+            </p>
+          </div>
+        </div>
+
+        <p class="worth-note">
+          Estimated at 15 seconds per blocked item — load time, distraction and the
+          attention an advert takes — valued at whatever your hour is worth. It is an
+          estimate, not a measurement, and not money that appears in your bank
+          account. Your own rate is yours to set in the extension.
+        </p>
+      </div>
+    </section>
+
+    <!-- ---------------- whack-a-popup ---------------- -->
+    <section class="section" style="padding-top:0">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Pop-unders too</span>
+          <h2>They keep coming back. AdBlo doesn't get tired.</h2>
+          <p class="lede">
+            Chrome's Manifest V3 removed the old pop-up blocking option entirely.
+            AdBlo neutralises pop-unders in the page itself, which is the only route
+            left — and one most Manifest V3 blockers simply dropped.
+          </p>
+        </div>
+        <div class="moles" role="img"
+          aria-label="Animation of pop-up adverts appearing and being knocked back down repeatedly.">
+          <span class="moles-label">Incoming pop-unders</span>
+          <span class="mole">FREE iPHONE</span>
+          <span class="mole">CLICK HERE</span>
+          <span class="mole">DOWNLOAD NOW</span>
+          <span class="mole">YOU WON!</span>
+          <span class="mole">SPIN TO WIN</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------- honesty ---------------- -->
+    <section class="section" style="padding-top:0">
+      <div class="wrap">
+        <div class="card" style="border-color:rgba(168,255,227,.3)">
+          <span class="eyebrow" style="color:var(--mint)">The bit other sites leave out</span>
+          <h3 style="font-size:24px">What AdBlo cannot do</h3>
+          <p style="max-width:70ch">
+            When a streaming platform uses <strong>server-side ad insertion</strong>, the
+            advert is spliced into the video stream before it reaches your browser.
+            It arrives as the same segments, from the same servers, in the same
+            format as the programme. There is no separate request to block and no ad
+            element to hide — the ad <em>is</em> the video.
+            <br><br>
+            No browser extension solves this. Not AdBlo, not uBlock Origin, not any
+            product claiming otherwise. We would rather tell you now than have you
+            find out after installing.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------- install ---------------- -->
+    <section class="section" id="install">
+      <div class="wrap">
+        <div class="cta">
+          <h2>Free, open source, and it stays that way.</h2>
+          <p class="lede" style="margin:0 auto 26px">
+            No paid tier. No upsell. No moment six months from now where the good
+            features move behind a subscription.
+          </p>
+          <div class="hero-cta" style="justify-content:center">
+            <a class="btn btn-primary" href="#">Add to Chrome — free</a>
+            <a class="btn btn-ghost" href="best-ad-blockers.html">Compare the top 5</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------- faq ---------------- -->
+    <section class="section" id="faq" style="padding-top:0">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">FAQ</span>
+          <h2>Straight answers</h2>
+        </div>
+
+        <details open>
+          <summary>Is AdBlo really free?</summary>
+          <p>Yes. Free and open source under GPL-3.0, with no paid tier, account or subscription. Every feature works
+            without signing in to anything.</p>
+        </details>
+        <details>
+          <summary>Do you take money from advertisers?</summary>
+          <p>No. AdBlo runs no acceptable ads programme and has no commercial relationship with any advertiser. Nothing
+            is allowed through in exchange for payment.</p>
+        </details>
+        <details>
+          <summary>Does AdBlo collect my browsing data?</summary>
+          <p>No. The extension contains no network code outside the filter list compiler, which runs on the developer's
+            machine at build time. Your statistics are stored locally and never transmitted.</p>
+        </details>
+        <details>
+          <summary>Can AdBlo block YouTube ads?</summary>
+          <p>AdBlo removes ad instructions from YouTube's player data before the player reads them, and skips mid-roll
+            breaks that get through. YouTube changes these formats often, so — as with every blocker — this occasionally
+            breaks until it is updated.</p>
+        </details>
+        <details>
+          <summary>What happened to uBlock Origin on Chrome?</summary>
+          <p>The full extension is built on Manifest V2, which Chrome disabled for ordinary users during its phase-out.
+            Its Manifest V3 successor, uBlock Origin Lite, is deliberately more limited. AdBlo was built for Manifest V3
+            from the first line rather than cut down to fit it.</p>
+        </details>
+        <details>
+          <summary>Will AdBlo slow down my browsing?</summary>
+          <p>Filtering runs through Chrome's own native matching engine, so the extension never sees or delays a
+            request. Generic element hiding ships as a plain stylesheet the browser applies with no JavaScript at all.
+          </p>
+        </details>
+      </div>
+    </section>
+    <script>
+      /* Live calculator. The point of the section is that the visitor sees *their*
+         number, not ours — a generic statistic persuades nobody. */
+      (() => {
+        const SECONDS_PER_ITEM = 15;
+        const $ = (id) => document.getElementById(id);
+
+        const duration = (seconds) => {
+          const m = Math.round(seconds / 60);
+          if (m < 60) return `${m} min`;
+          const h = Math.floor(m / 60);
+          return h < 48 ? (m % 60 ? `${h} h ${m % 60} m` : `${h} h`) : `${Math.floor(h / 24)} d`;
+        };
+        const money = (n) => n < 1000 ? `$${Math.round(n)}` : `$${(n / 1000).toFixed(1)}K`;
+
+        function recalc() {
+          const ads = Math.max(0, Number($('c-ads').value) || 0);
+          const rate = Math.max(0, Number($('c-rate').value) || 0);
+          const seconds = ads * 365 * SECONDS_PER_ITEM;
+          $('c-time').textContent = duration(seconds);
+          $('c-money').textContent = money((seconds / 3600) * rate);
+        }
+
+        $('c-ads').addEventListener('input', recalc);
+        $('c-rate').addEventListener('input', recalc);
+        recalc();
+      })();
+    </script>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-in">
+      <span>© 2026 AdBlo · GPL-3.0 · Made for people who read permission dialogs</span>
+      <nav aria-label="Footer">
+        <a href="ad-blockers-compare.html">Comparison</a> ·
+        <a href="best-ad-blockers.html">Best ad blockers</a> ·
+        <a href="#faq">FAQ</a> ·
+        <a href="adblo-privacy.html">Privacy</a>
+        <a href="index.html" class="brandb">bun<span class="k">k</span>lyf</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+
+</html>

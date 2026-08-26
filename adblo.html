@@ -615,7 +615,7 @@
     .w-money {
       font-family: var(--mono);
       font-weight: 700;
-      color: var(--pink2);
+      color: var(--pink);
     }
 
     .calc-row {
@@ -1238,8 +1238,68 @@
       })();
     </script>
 
+    <!-- ---------------- the value section ---------------- -->
+    <section class="section" id="worth" style="padding-top:0">
+      <div class="wrap">
+        <div class="">
+          <span class="eyebrow">What blocking is actually worth</span>
+          <h1>You didn't block 4,600 ads.<br>You got <span class="pink">19 hours </span> of your life
+            back - that's <span class="pink">$380 </span>worth of your time. </h1>
+          <p class="lede">
+            A block count is a statistic. Time is the thing you actually lost. AdBlo
+            shows both — on every page, and for all time.
+          </p>
+        </div>
+
+        <div class="worth-grid">
+          <div class="worth-card">
+            <span class="worth-label">On this page</span>
+            <b class="worth-big" id="w-blocked">12</b>
+            <span class="worth-sub">blocked</span>
+            <div class="worth-line">
+              <span class="w-time" id="w-time">3 min</span> saved ·
+              <span class="w-money" id="w-money">$1</span> of your time back
+            </div>
+          </div>
+
+          <div class="worth-card">
+            <span class="worth-label">All time</span>
+            <b class="worth-big" id="w-total">4.6K</b>
+            <span class="worth-sub">blocked · 2.8 MB not downloaded</span>
+            <div class="worth-line">
+              <span class="w-time" id="w-ttime">19 h 13 m</span> saved ·
+              <span class="w-money" id="w-tmoney">$384</span> earned back
+            </div>
+          </div>
+
+          <div class="worth-card calc">
+            <span class="worth-label">Your number</span>
+            <label class="calc-row">
+              <span>Ads blocked a day</span>
+              <input type="number" id="c-ads" value="120" min="0" max="10000">
+            </label>
+            <label class="calc-row">
+              <span>Your hourly rate</span>
+              <input type="number" id="c-rate" value="20" min="0" max="100000">
+            </label>
+            <p class="calc-out">
+              In a year that's <b class="w-time" id="c-time">182 h</b>
+              and <b class="w-money" id="c-money">$3.6K</b> of your time.
+            </p>
+          </div>
+        </div>
+
+        <p class="worth-note">
+          Estimated at 15 seconds per blocked item — load time, distraction and the
+          attention an advert takes — valued at whatever your hour is worth. It is an
+          estimate, not a measurement, and not money that appears in your bank
+          account. Your own rate is yours to set in the extension.
+        </p>
+      </div>
+    </section>
+
     <!-- ---------------- features ---------------- -->
-    <section class="section" id="features">
+    <section class="section" id="features" style="padding-top:0">
       <div class="wrap">
         <div class="section-head">
           <span class="eyebrow">What it does</span>
@@ -1309,64 +1369,7 @@
       </div>
     </section>
 
-    <!-- ---------------- the value section ---------------- -->
-    <section class="section" id="worth" style="padding-top:0">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="eyebrow">What blocking is actually worth</span>
-          <h2>You didn't block 4,600 ads.<br>You got <span class="pink">nineteen hours</span> of your life back.</h2>
-          <p class="lede">
-            A block count is a statistic. Time is the thing you actually lost. AdBlo
-            shows both — on every page, and for all time.
-          </p>
-        </div>
 
-        <div class="worth-grid">
-          <div class="worth-card">
-            <span class="worth-label">On this page</span>
-            <b class="worth-big" id="w-blocked">12</b>
-            <span class="worth-sub">blocked</span>
-            <div class="worth-line">
-              <span class="w-time" id="w-time">3 min</span> saved ·
-              <span class="w-money" id="w-money">$1</span> of your time back
-            </div>
-          </div>
-
-          <div class="worth-card">
-            <span class="worth-label">All time</span>
-            <b class="worth-big" id="w-total">4.6K</b>
-            <span class="worth-sub">blocked · 2.8 MB not downloaded</span>
-            <div class="worth-line">
-              <span class="w-time" id="w-ttime">19 h 13 m</span> saved ·
-              <span class="w-money" id="w-tmoney">$384</span> earned back
-            </div>
-          </div>
-
-          <div class="worth-card calc">
-            <span class="worth-label">Your number</span>
-            <label class="calc-row">
-              <span>Ads blocked a day</span>
-              <input type="number" id="c-ads" value="120" min="0" max="10000">
-            </label>
-            <label class="calc-row">
-              <span>Your hourly rate</span>
-              <input type="number" id="c-rate" value="20" min="0" max="100000">
-            </label>
-            <p class="calc-out">
-              In a year that's <b class="w-time" id="c-time">182 h</b>
-              and <b class="w-money" id="c-money">$3.6K</b> of your time.
-            </p>
-          </div>
-        </div>
-
-        <p class="worth-note">
-          Estimated at 15 seconds per blocked item — load time, distraction and the
-          attention an advert takes — valued at whatever your hour is worth. It is an
-          estimate, not a measurement, and not money that appears in your bank
-          account. Your own rate is yours to set in the extension.
-        </p>
-      </div>
-    </section>
 
     <!-- ---------------- whack-a-popup ---------------- -->
     <section class="section" style="padding-top:0">
